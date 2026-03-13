@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0075)file:///C:/Users/Gavin%20K.%20Markus/Downloads/math-multiplication-app.html -->
+<!-- saved from url=(0077)file:///C:/Users/Gavin%20K.%20Markus/Downloads/math-multiplication-app_1.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +7,8 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:system-ui,-apple-system,sans-serif;color:#1a1a1a;background:#f5f5f3;padding:1rem}
+@keyframes redflash{0%,100%{background:#f5f5f3}50%{background:#FCEBEB}}
+body.slow{animation:redflash 0.8s ease-in-out infinite}
 .app{max-width:700px;margin:0 auto;padding:0.5rem 0}
 .tabs{display:flex;gap:2px;border-bottom:1px solid #e0e0d8;margin-bottom:1.25rem;flex-wrap:wrap}
 .tab-btn{padding:7px 13px;font-size:13px;font-weight:500;border:none;background:none;cursor:pointer;color:#666;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color 0.15s;white-space:nowrap}
@@ -52,6 +54,8 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#1a1a1a;background:#f5
 .start-btn{padding:10px 28px;border:0.5px solid #ccc;border-radius:8px;background:#1a1a1a;color:#fff;font-size:15px;font-weight:500;cursor:pointer;margin-top:0.75rem}
 .r-chip{padding:4px 12px;border:0.5px solid #ccc;border-radius:20px;font-size:13px;cursor:pointer;background:#fff;color:#1a1a1a;display:inline-block}
 .r-chip.sel{background:#1a1a1a;color:#fff}
+.slow-chk{display:flex;align-items:center;gap:6px;font-size:12px;color:#888;cursor:pointer;user-select:none;margin-left:auto}
+.slow-chk input{cursor:pointer;width:14px;height:14px}
 .review-section{margin-top:0.75rem}
 .review-title{font-size:13px;font-weight:500;color:#888;margin-bottom:8px}
 .review-item{display:flex;align-items:center;gap:10px;padding:6px 10px;border:0.5px solid #F7C1C1;border-radius:8px;background:#FCEBEB;margin-bottom:5px;font-size:14px}
@@ -66,7 +70,7 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#1a1a1a;background:#f5
 .hm-hdr{width:34px;height:28px;text-align:center;line-height:28px;font-size:11px;color:#888;font-weight:500}
 </style>
 </head>
-<body>
+<body class="slow">
 <div class="app">
 <div class="tabs">
   <button class="tab-btn active" onclick="showTab(0)">Times tables</button>
@@ -79,14 +83,15 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#1a1a1a;background:#f5
 <div class="tab active" id="t0">
   <div class="section">
     <div class="lbl">Times table</div>
-    <div class="chips" id="tt-chips"><div class="chip">1</div><div class="chip">2</div><div class="chip sel">3</div><div class="chip">4</div><div class="chip">5</div><div class="chip">6</div><div class="chip">7</div><div class="chip">8</div><div class="chip">9</div><div class="chip">10</div></div>
+    <div class="chips" id="tt-chips"><div class="chip">1</div><div class="chip">2</div><div class="chip">3</div><div class="chip">4</div><div class="chip sel">5</div><div class="chip">6</div><div class="chip">7</div><div class="chip">8</div><div class="chip">9</div><div class="chip">10</div></div>
   </div>
   <div class="controls-row">
     <div class="mode-toggle">
-      <button class="mode-btn" onclick="setMode(&#39;t0&#39;,&#39;mc&#39;)">Multiple choice</button>
-      <button class="mode-btn active" onclick="setMode(&#39;t0&#39;,&#39;fill&#39;)">Fill in</button>
+      <button class="mode-btn active" onclick="setMode(&#39;t0&#39;,&#39;mc&#39;)">Multiple choice</button>
+      <button class="mode-btn" onclick="setMode(&#39;t0&#39;,&#39;fill&#39;)">Fill in</button>
     </div>
     <button class="timer-btn" id="t0-tbtn" onclick="toggleTimer(&#39;t0&#39;)">60s timer</button>
+    <label class="slow-chk"><input type="checkbox" id="t0-slowchk" checked="" onchange="toggleSlowAlert(&#39;t0&#39;,this.checked)"> red alert &gt;5s</label>
   </div>
   <div class="timer-bar-wrap" id="t0-barwrap" style="display:none"><div class="timer-bar" id="t0-bar" style="width:100%"></div></div>
   <div class="stats">
@@ -94,7 +99,7 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#1a1a1a;background:#f5
     <div class="stat"><div class="stat-val" id="t0-streak">0</div><div class="stat-lbl">streak</div></div>
     <div class="stat" id="t0-timestat" style="display:none"><div class="stat-val" id="t0-time">60</div><div class="stat-lbl">seconds</div></div>
   </div>
-  <div class="section q-box" id="t0-qbox"><div class="question">3 × 2</div><div class="fill-form"><input class="fill-input" type="number" id="t0-inp" placeholder="?" onkeydown="if(event.key===&#39;Enter&#39;)checkFill(&#39;t0&#39;,6)" disabled="" style="border-color: rgb(226, 75, 74);"><button class="submit-btn" onclick="checkFill(&#39;t0&#39;,6)" disabled="">Check</button><div class="feedback fb-wrong" id="t0-fb">Not quite</div><button class="next-btn">Next →</button><div style="font-size: 13px; color: rgb(136, 136, 136); margin-top: 4px;">Answer: 6</div></div></div>
+  <div class="section q-box" id="t0-qbox"><div class="question">5 × 6</div><div class="mc-grid"><button class="mc-btn" onclick="checkMC(&#39;t0&#39;,30,this)">30</button><button class="mc-btn" onclick="checkMC(&#39;t0&#39;,32,this)">32</button><button class="mc-btn" onclick="checkMC(&#39;t0&#39;,33,this)">33</button><button class="mc-btn" onclick="checkMC(&#39;t0&#39;,27,this)">27</button></div><div class="feedback" id="t0-fb"></div></div>
   <div id="t0-review"></div>
 </div>
 
@@ -111,6 +116,7 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#1a1a1a;background:#f5
       <button class="mode-btn" onclick="setMode(&#39;t1&#39;,&#39;fill&#39;)">Fill in</button>
     </div>
     <button class="timer-btn" id="t1-tbtn" onclick="toggleTimer(&#39;t1&#39;)">60s timer</button>
+    <label class="slow-chk"><input type="checkbox" id="t1-slowchk" checked="" onchange="toggleSlowAlert(&#39;t1&#39;,this.checked)"> red alert &gt;5s</label>
   </div>
   <div class="timer-bar-wrap" id="t1-barwrap" style="display:none"><div class="timer-bar" id="t1-bar" style="width:100%"></div></div>
   <div class="stats">
@@ -135,6 +141,7 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#1a1a1a;background:#f5
       <button class="mode-btn" onclick="setMode(&#39;t2&#39;,&#39;fill&#39;)">Fill in</button>
     </div>
     <button class="timer-btn" id="t2-tbtn" onclick="toggleTimer(&#39;t2&#39;)">60s timer</button>
+    <label class="slow-chk"><input type="checkbox" id="t2-slowchk" checked="" onchange="toggleSlowAlert(&#39;t2&#39;,this.checked)"> red alert &gt;5s</label>
   </div>
   <div class="timer-bar-wrap" id="t2-barwrap" style="display:none"><div class="timer-bar" id="t2-bar" style="width:100%"></div></div>
   <div class="stats">
@@ -161,6 +168,7 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#1a1a1a;background:#f5
       <button class="mode-btn" onclick="setMode(&#39;t3&#39;,&#39;fill&#39;)">Fill in</button>
     </div>
     <button class="timer-btn" id="t3-tbtn" onclick="toggleTimer(&#39;t3&#39;)">60s timer</button>
+    <label class="slow-chk"><input type="checkbox" id="t3-slowchk" checked="" onchange="toggleSlowAlert(&#39;t3&#39;,this.checked)"> red alert &gt;5s</label>
   </div>
   <div class="timer-bar-wrap" id="t3-barwrap" style="display:none"><div class="timer-bar" id="t3-bar" style="width:100%"></div></div>
   <div class="stats">
@@ -195,11 +203,24 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#1a1a1a;background:#f5
 <script>
 const TIDS=['t0','t1','t2','t3'];
 const state={
-  t0:{score:0,streak:0,mode:'mc',timerOn:false,timeLeft:60,timerId:null,x:null,answered:false,wrongs:[],curX:null,curY:null,curAnswer:null},
-  t1:{score:0,streak:0,mode:'mc',timerOn:false,timeLeft:60,timerId:null,xSel:[],ySel:[],answered:false,wrongs:[],curX:null,curY:null,curAnswer:null},
-  t2:{score:0,streak:0,mode:'mc',timerOn:false,timeLeft:60,timerId:null,xSel:[],ySel:[],answered:false,wrongs:[],curX:null,curY:null,curAnswer:null},
-  t3:{score:0,streak:0,mode:'mc',timerOn:false,timeLeft:60,timerId:null,roundTo:10,answered:false,wrongs:[],curX:null,curY:null,curAnswer:null}
+  t0:{score:0,streak:0,mode:'mc',timerOn:false,timeLeft:60,timerId:null,x:null,answered:false,wrongs:[],curX:null,curY:null,curAnswer:null,slowAlertOn:true,slowId:null},
+  t1:{score:0,streak:0,mode:'mc',timerOn:false,timeLeft:60,timerId:null,xSel:[],ySel:[],answered:false,wrongs:[],curX:null,curY:null,curAnswer:null,slowAlertOn:true,slowId:null},
+  t2:{score:0,streak:0,mode:'mc',timerOn:false,timeLeft:60,timerId:null,xSel:[],ySel:[],answered:false,wrongs:[],curX:null,curY:null,curAnswer:null,slowAlertOn:true,slowId:null},
+  t3:{score:0,streak:0,mode:'mc',timerOn:false,timeLeft:60,timerId:null,roundTo:10,answered:false,wrongs:[],curX:null,curY:null,curAnswer:null,slowAlertOn:true,slowId:null}
 };
+
+function toggleSlowAlert(tid,on){state[tid].slowAlertOn=on;}
+
+function startSlowTimer(tid){
+  clearSlowTimer(tid);
+  if(!state[tid].slowAlertOn)return;
+  state[tid].slowId=setTimeout(()=>{document.body.classList.add('slow');},5000);
+}
+
+function clearSlowTimer(tid){
+  clearTimeout(state[tid].slowId);state[tid].slowId=null;
+  document.body.classList.remove('slow');
+}
 const hm={};
 
 function ri(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
@@ -216,6 +237,7 @@ function recordHm(x,y,correct){
 }
 
 function showTab(i){
+  TIDS.forEach(tid=>clearSlowTimer(tid));
   document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('active',i===j));
   document.querySelectorAll('.tab-btn').forEach((b,j)=>b.classList.toggle('active',i===j));
   if(i===4)renderHeatmap();
@@ -284,6 +306,7 @@ function toggleChip(tid,axis,n,c){
 function startGame(tid){
   const s=state[tid];
   s.score=0;s.streak=0;s.wrongs=[];
+  clearSlowTimer(tid);
   updStats(tid);renderReview(tid);
   if(s.timerOn){resetTimer(tid);startTimer(tid);}
   askQ(tid);
@@ -342,6 +365,7 @@ function askQ(tid){
   }
   s.curX=x;s.curY=y;s.curAnswer=answer;
   renderQ(tid,displayQ,answer,s.mode,tid==='t3'?s.roundTo:null,tid==='t3'?s.curProduct:null);
+  startSlowTimer(tid);
 }
 
 function renderQ(tid,dq,answer,mode,roundTo,rawProduct){
@@ -379,6 +403,7 @@ function shuffle(a){for(let i=a.length-1;i>0;i--){const j=ri(0,i);[a[i],a[j]]=[a
 function checkMC(tid,val,btn){
   if(state[tid].answered)return;
   state[tid].answered=true;
+  clearSlowTimer(tid);
   const correct=val===state[tid].curAnswer;
   btn.classList.add(correct?'correct':'wrong');
   if(!correct){
@@ -405,6 +430,7 @@ function checkFill(tid,answer){
   if(!inp||inp.value==='')return;
   const val=parseInt(inp.value);
   state[tid].answered=true;
+  clearSlowTimer(tid);
   inp.disabled=true;
   document.querySelector('#'+tid+'-qbox .submit-btn').disabled=true;
   const correct=val===answer;
