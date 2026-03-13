@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0077)file:///C:/Users/Gavin%20K.%20Markus/Downloads/math-multiplication-app_1.html -->
+<!-- saved from url=(0059)file:///C:/Users/Gavin%20K.%20Markus/Downloads/index_1.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -83,7 +83,7 @@ body.slow{animation:redflash 0.8s ease-in-out infinite}
 <div class="tab active" id="t0">
   <div class="section">
     <div class="lbl">Times table</div>
-    <div class="chips" id="tt-chips"><div class="chip">1</div><div class="chip">2</div><div class="chip">3</div><div class="chip">4</div><div class="chip sel">5</div><div class="chip">6</div><div class="chip">7</div><div class="chip">8</div><div class="chip">9</div><div class="chip">10</div></div>
+    <div class="chips" id="tt-chips"><div class="chip">1</div><div class="chip">2</div><div class="chip">3</div><div class="chip">4</div><div class="chip">5</div><div class="chip">6</div><div class="chip">7</div><div class="chip">8</div><div class="chip">9</div><div class="chip">10</div></div>
   </div>
   <div class="controls-row">
     <div class="mode-toggle">
@@ -95,11 +95,11 @@ body.slow{animation:redflash 0.8s ease-in-out infinite}
   </div>
   <div class="timer-bar-wrap" id="t0-barwrap" style="display:none"><div class="timer-bar" id="t0-bar" style="width:100%"></div></div>
   <div class="stats">
-    <div class="stat"><div class="stat-val" id="t0-score">0</div><div class="stat-lbl">score</div></div>
-    <div class="stat"><div class="stat-val" id="t0-streak">0</div><div class="stat-lbl">streak</div></div>
+    <div class="stat"><div class="stat-val" id="t0-score">2</div><div class="stat-lbl">score</div></div>
+    <div class="stat"><div class="stat-val" id="t0-streak">2</div><div class="stat-lbl">streak</div></div>
     <div class="stat" id="t0-timestat" style="display:none"><div class="stat-val" id="t0-time">60</div><div class="stat-lbl">seconds</div></div>
   </div>
-  <div class="section q-box" id="t0-qbox"><div class="question">5 × 6</div><div class="mc-grid"><button class="mc-btn" onclick="checkMC(&#39;t0&#39;,30,this)">30</button><button class="mc-btn" onclick="checkMC(&#39;t0&#39;,32,this)">32</button><button class="mc-btn" onclick="checkMC(&#39;t0&#39;,33,this)">33</button><button class="mc-btn" onclick="checkMC(&#39;t0&#39;,27,this)">27</button></div><div class="feedback" id="t0-fb"></div></div>
+  <div class="section q-box" id="t0-qbox"><div class="question">5 × 5</div><div class="mc-grid"><button class="mc-btn" onclick="checkMC(&#39;t0&#39;,25,this)">25</button><button class="mc-btn" onclick="checkMC(&#39;t0&#39;,26,this)">26</button><button class="mc-btn" onclick="checkMC(&#39;t0&#39;,27,this)">27</button><button class="mc-btn" onclick="checkMC(&#39;t0&#39;,24,this)">24</button></div><div class="feedback" id="t0-fb"></div></div>
   <div id="t0-review"></div>
 </div>
 
@@ -286,6 +286,7 @@ buildChips('tt-chips',range(1,10),(n,c)=>{
   if(state.t0.timerOn){resetTimer('t0');startTimer('t0');}
   startGame('t0');
 },[]);
+state.t0.x=5;startGame('t0');
 
 buildChips('t1-x-chips',range(1,10),(n,c)=>toggleChip('t1','x',n,c),[]);
 buildChips('t1-y-chips',range(1,10),(n,c)=>toggleChip('t1','y',n,c),range(1,10));
@@ -437,10 +438,6 @@ function checkFill(tid,answer){
   inp.style.borderColor=correct?'#639922':'#E24B4A';
   if(!correct){
     state[tid].wrongs.push({x:state[tid].curX,y:state[tid].curY,ans:answer,given:val});
-    const hint=document.createElement('div');
-    hint.style.cssText='font-size:13px;color:#888;margin-top:4px';
-    hint.textContent='Answer: '+answer;
-    document.getElementById(tid+'-fb').after(hint);
   }
   scoreFeedback(tid,correct);
   recordHm(state[tid].curX,state[tid].curY,correct);
@@ -455,8 +452,9 @@ function checkFill(tid,answer){
 
 function scoreFeedback(tid,correct){
   const s=state[tid],fb=document.getElementById(tid+'-fb');
-  if(correct){s.score++;s.streak++;fb.className='feedback fb-correct';fb.textContent=s.streak>=3?'Correct! '+s.streak+' in a row':'Correct!';}
-  else{s.streak=0;fb.className='feedback fb-wrong';fb.textContent='Not quite';}
+  const ans=s.curAnswer;
+  if(correct){s.score++;s.streak++;fb.className='feedback fb-correct';fb.textContent=(s.streak>=3?'Correct! '+s.streak+' in a row':'Correct!')+' = '+ans;}
+  else{s.streak=0;fb.className='feedback fb-wrong';fb.textContent='Answer: '+ans;}
   updStats(tid);
 }
 
