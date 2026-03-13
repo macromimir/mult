@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<!-- saved from url=(0075)file:///C:/Users/Gavin%20K.%20Markus/Downloads/math-multiplication-app.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math Multiplication App</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;color:#1a1a1a;background:#f5f5f3;padding:1rem}
+.app{max-width:700px;margin:0 auto;padding:0.5rem 0}
+.tabs{display:flex;gap:2px;border-bottom:1px solid #e0e0d8;margin-bottom:1.25rem;flex-wrap:wrap}
+.tab-btn{padding:7px 13px;font-size:13px;font-weight:500;border:none;background:none;cursor:pointer;color:#666;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color 0.15s;white-space:nowrap}
+.tab-btn.active{color:#1a1a1a;border-bottom-color:#1a1a1a}
+.tab-btn:hover:not(.active){color:#1a1a1a}
+.tab{display:none}.tab.active{display:block}
+.section{background:#fff;border:0.5px solid #e0e0d8;border-radius:12px;padding:1rem 1.25rem;margin-bottom:0.75rem}
+.lbl{font-size:12px;color:#888;margin-bottom:6px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{padding:4px 10px;border:0.5px solid #ccc;border-radius:20px;font-size:13px;cursor:pointer;background:#fff;color:#1a1a1a;transition:all 0.1s;user-select:none}
+.chip.sel{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.chip:hover:not(.sel){background:#f5f5f3}
+.controls-row{display:flex;gap:8px;align-items:center;margin-bottom:0.75rem;flex-wrap:wrap}
+.mode-toggle{display:flex;gap:3px}
+.mode-btn{padding:6px 12px;border:0.5px solid #ccc;background:#fff;color:#888;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;transition:all 0.15s}
+.mode-btn.active{background:#f5f5f3;color:#1a1a1a;border-color:#aaa}
+.timer-btn{padding:6px 12px;border:0.5px solid #ccc;background:#fff;color:#888;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;transition:all 0.15s}
+.timer-btn.active{background:#EAF3DE;color:#3B6D11;border-color:#639922}
+.stats{display:flex;gap:8px;justify-content:center;margin-bottom:0.75rem;flex-wrap:wrap}
+.stat{background:#f5f5f3;border-radius:8px;padding:6px 14px;text-align:center;min-width:64px}
+.stat-val{font-size:20px;font-weight:500}
+.stat-lbl{font-size:11px;color:#888}
+.timer-bar-wrap{height:4px;background:#f0f0ec;border-radius:2px;margin-bottom:0.75rem;overflow:hidden}
+.timer-bar{height:4px;background:#639922;border-radius:2px;transition:width 1s linear,background 0.5s}
+.timer-bar.warn{background:#BA7517}
+.timer-bar.danger{background:#E24B4A}
+.q-box{text-align:center;padding:1.5rem 1rem}
+.question{font-size:44px;font-weight:500;margin-bottom:1.25rem;letter-spacing:-1px;line-height:1.1}
+.question .sub{font-size:17px;font-weight:400;color:#888;display:block;margin-top:6px}
+.mc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:300px;margin:0 auto 1rem}
+.mc-btn{padding:14px;border:0.5px solid #ccc;border-radius:8px;font-size:20px;font-weight:500;cursor:pointer;background:#fff;color:#1a1a1a;transition:all 0.12s}
+.mc-btn:hover:not(:disabled){background:#f5f5f3}
+.mc-btn.correct{background:#EAF3DE;border-color:#639922;color:#3B6D11}
+.mc-btn.wrong{background:#FCEBEB;border-color:#E24B4A;color:#A32D2D}
+.fill-form{display:flex;flex-direction:column;align-items:center;gap:10px}
+.fill-input{width:110px;height:50px;font-size:26px;font-weight:500;text-align:center;border:1px solid #ccc;border-radius:8px;background:#fff;color:#1a1a1a}
+.fill-input:focus{outline:none;border-color:#888}
+.submit-btn{padding:8px 22px;border:0.5px solid #ccc;border-radius:8px;background:#fff;color:#1a1a1a;font-size:14px;font-weight:500;cursor:pointer}
+.submit-btn:hover{background:#f5f5f3}
+.next-btn{padding:8px 22px;border:0.5px solid #ccc;border-radius:8px;background:#1a1a1a;color:#fff;font-size:14px;font-weight:500;cursor:pointer;margin-top:10px;display:inline-block}
+.feedback{font-size:16px;font-weight:500;min-height:24px;margin-top:4px}
+.fb-correct{color:#3B6D11}.fb-wrong{color:#A32D2D}
+.start-btn{padding:10px 28px;border:0.5px solid #ccc;border-radius:8px;background:#1a1a1a;color:#fff;font-size:15px;font-weight:500;cursor:pointer;margin-top:0.75rem}
+.r-chip{padding:4px 12px;border:0.5px solid #ccc;border-radius:20px;font-size:13px;cursor:pointer;background:#fff;color:#1a1a1a;display:inline-block}
+.r-chip.sel{background:#1a1a1a;color:#fff}
+.review-section{margin-top:0.75rem}
+.review-title{font-size:13px;font-weight:500;color:#888;margin-bottom:8px}
+.review-item{display:flex;align-items:center;gap:10px;padding:6px 10px;border:0.5px solid #F7C1C1;border-radius:8px;background:#FCEBEB;margin-bottom:5px;font-size:14px}
+.review-eq{font-weight:500;color:#791F1F;flex:1}
+.review-yours{color:#A32D2D;font-size:13px}
+.end-screen{text-align:center;padding:1.5rem 1rem}
+.end-big{font-size:36px;font-weight:500;margin-bottom:0.5rem}
+.end-sub{font-size:15px;color:#888;margin-bottom:1.25rem}
+.heatmap-wrap{overflow-x:auto}
+.hm-table{border-collapse:separate;border-spacing:3px;font-size:12px;margin:0 auto}
+.hm-cell{width:34px;height:28px;border-radius:4px;text-align:center;line-height:28px;font-weight:500;cursor:default;font-size:11px}
+.hm-hdr{width:34px;height:28px;text-align:center;line-height:28px;font-size:11px;color:#888;font-weight:500}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab(0)">Times tables</button>
+  <button class="tab-btn" onclick="showTab(1)">1–10</button>
+  <button class="tab-btn" onclick="showTab(2)">1–20</button>
+  <button class="tab-btn" onclick="showTab(3)">Rounding</button>
+  <button class="tab-btn" onclick="showTab(4)">Heat map</button>
+</div>
+
+<div class="tab active" id="t0">
+  <div class="section">
+    <div class="lbl">Times table</div>
+    <div class="chips" id="tt-chips"><div class="chip">1</div><div class="chip">2</div><div class="chip sel">3</div><div class="chip">4</div><div class="chip">5</div><div class="chip">6</div><div class="chip">7</div><div class="chip">8</div><div class="chip">9</div><div class="chip">10</div></div>
+  </div>
+  <div class="controls-row">
+    <div class="mode-toggle">
+      <button class="mode-btn" onclick="setMode(&#39;t0&#39;,&#39;mc&#39;)">Multiple choice</button>
+      <button class="mode-btn active" onclick="setMode(&#39;t0&#39;,&#39;fill&#39;)">Fill in</button>
+    </div>
+    <button class="timer-btn" id="t0-tbtn" onclick="toggleTimer(&#39;t0&#39;)">60s timer</button>
+  </div>
+  <div class="timer-bar-wrap" id="t0-barwrap" style="display:none"><div class="timer-bar" id="t0-bar" style="width:100%"></div></div>
+  <div class="stats">
+    <div class="stat"><div class="stat-val" id="t0-score">0</div><div class="stat-lbl">score</div></div>
+    <div class="stat"><div class="stat-val" id="t0-streak">0</div><div class="stat-lbl">streak</div></div>
+    <div class="stat" id="t0-timestat" style="display:none"><div class="stat-val" id="t0-time">60</div><div class="stat-lbl">seconds</div></div>
+  </div>
+  <div class="section q-box" id="t0-qbox"><div class="question">3 × 2</div><div class="fill-form"><input class="fill-input" type="number" id="t0-inp" placeholder="?" onkeydown="if(event.key===&#39;Enter&#39;)checkFill(&#39;t0&#39;,6)" disabled="" style="border-color: rgb(226, 75, 74);"><button class="submit-btn" onclick="checkFill(&#39;t0&#39;,6)" disabled="">Check</button><div class="feedback fb-wrong" id="t0-fb">Not quite</div><button class="next-btn">Next →</button><div style="font-size: 13px; color: rgb(136, 136, 136); margin-top: 4px;">Answer: 6</div></div></div>
+  <div id="t0-review"></div>
+</div>
+
+<div class="tab" id="t1">
+  <div class="section">
+    <div class="lbl">X — pick one to focus, or leave all</div>
+    <div class="chips" id="t1-x-chips"><div class="chip">1</div><div class="chip">2</div><div class="chip">3</div><div class="chip">4</div><div class="chip">5</div><div class="chip">6</div><div class="chip">7</div><div class="chip">8</div><div class="chip">9</div><div class="chip">10</div></div>
+    <div class="lbl" style="margin-top:10px">Y</div>
+    <div class="chips" id="t1-y-chips"><div class="chip sel">1</div><div class="chip sel">2</div><div class="chip sel">3</div><div class="chip sel">4</div><div class="chip sel">5</div><div class="chip sel">6</div><div class="chip sel">7</div><div class="chip sel">8</div><div class="chip sel">9</div><div class="chip sel">10</div></div>
+  </div>
+  <div class="controls-row">
+    <div class="mode-toggle">
+      <button class="mode-btn active" onclick="setMode(&#39;t1&#39;,&#39;mc&#39;)">Multiple choice</button>
+      <button class="mode-btn" onclick="setMode(&#39;t1&#39;,&#39;fill&#39;)">Fill in</button>
+    </div>
+    <button class="timer-btn" id="t1-tbtn" onclick="toggleTimer(&#39;t1&#39;)">60s timer</button>
+  </div>
+  <div class="timer-bar-wrap" id="t1-barwrap" style="display:none"><div class="timer-bar" id="t1-bar" style="width:100%"></div></div>
+  <div class="stats">
+    <div class="stat"><div class="stat-val" id="t1-score">0</div><div class="stat-lbl">score</div></div>
+    <div class="stat"><div class="stat-val" id="t1-streak">0</div><div class="stat-lbl">streak</div></div>
+    <div class="stat" id="t1-timestat" style="display:none"><div class="stat-val" id="t1-time">60</div><div class="stat-lbl">seconds</div></div>
+  </div>
+  <div class="section q-box" id="t1-qbox"><button class="start-btn" onclick="startGame(&#39;t1&#39;)">Start</button></div>
+  <div id="t1-review"></div>
+</div>
+
+<div class="tab" id="t2">
+  <div class="section">
+    <div class="lbl">X — 1 to 10</div>
+    <div class="chips" id="t2-x-chips"><div class="chip sel">1</div><div class="chip sel">2</div><div class="chip sel">3</div><div class="chip sel">4</div><div class="chip sel">5</div><div class="chip sel">6</div><div class="chip sel">7</div><div class="chip sel">8</div><div class="chip sel">9</div><div class="chip sel">10</div></div>
+    <div class="lbl" style="margin-top:10px">Y — 1 to 20</div>
+    <div class="chips" id="t2-y-chips"><div class="chip sel">1</div><div class="chip sel">2</div><div class="chip sel">3</div><div class="chip sel">4</div><div class="chip sel">5</div><div class="chip sel">6</div><div class="chip sel">7</div><div class="chip sel">8</div><div class="chip sel">9</div><div class="chip sel">10</div><div class="chip sel">11</div><div class="chip sel">12</div><div class="chip sel">13</div><div class="chip sel">14</div><div class="chip sel">15</div><div class="chip sel">16</div><div class="chip sel">17</div><div class="chip sel">18</div><div class="chip sel">19</div><div class="chip sel">20</div></div>
+  </div>
+  <div class="controls-row">
+    <div class="mode-toggle">
+      <button class="mode-btn active" onclick="setMode(&#39;t2&#39;,&#39;mc&#39;)">Multiple choice</button>
+      <button class="mode-btn" onclick="setMode(&#39;t2&#39;,&#39;fill&#39;)">Fill in</button>
+    </div>
+    <button class="timer-btn" id="t2-tbtn" onclick="toggleTimer(&#39;t2&#39;)">60s timer</button>
+  </div>
+  <div class="timer-bar-wrap" id="t2-barwrap" style="display:none"><div class="timer-bar" id="t2-bar" style="width:100%"></div></div>
+  <div class="stats">
+    <div class="stat"><div class="stat-val" id="t2-score">0</div><div class="stat-lbl">score</div></div>
+    <div class="stat"><div class="stat-val" id="t2-streak">0</div><div class="stat-lbl">streak</div></div>
+    <div class="stat" id="t2-timestat" style="display:none"><div class="stat-val" id="t2-time">60</div><div class="stat-lbl">seconds</div></div>
+  </div>
+  <div class="section q-box" id="t2-qbox"><button class="start-btn" onclick="startGame(&#39;t2&#39;)">Start</button></div>
+  <div id="t2-review"></div>
+</div>
+
+<div class="tab" id="t3">
+  <div class="section">
+    <div class="lbl">Round to nearest</div>
+    <div style="display:flex;gap:6px" id="round-opts">
+      <div class="r-chip sel" data-v="10" onclick="setRound(10)">10</div>
+      <div class="r-chip" data-v="100" onclick="setRound(100)">100</div>
+    </div>
+    <div style="font-size:12px;color:#888;margin-top:8px">X: random 1–50 · Y: random 1–20</div>
+  </div>
+  <div class="controls-row">
+    <div class="mode-toggle">
+      <button class="mode-btn active" onclick="setMode(&#39;t3&#39;,&#39;mc&#39;)">Multiple choice</button>
+      <button class="mode-btn" onclick="setMode(&#39;t3&#39;,&#39;fill&#39;)">Fill in</button>
+    </div>
+    <button class="timer-btn" id="t3-tbtn" onclick="toggleTimer(&#39;t3&#39;)">60s timer</button>
+  </div>
+  <div class="timer-bar-wrap" id="t3-barwrap" style="display:none"><div class="timer-bar" id="t3-bar" style="width:100%"></div></div>
+  <div class="stats">
+    <div class="stat"><div class="stat-val" id="t3-score">0</div><div class="stat-lbl">score</div></div>
+    <div class="stat"><div class="stat-val" id="t3-streak">0</div><div class="stat-lbl">streak</div></div>
+    <div class="stat" id="t3-timestat" style="display:none"><div class="stat-val" id="t3-time">60</div><div class="stat-lbl">seconds</div></div>
+  </div>
+  <div class="section q-box" id="t3-qbox"><button class="start-btn" onclick="startGame(&#39;t3&#39;)">Start</button></div>
+  <div id="t3-review"></div>
+</div>
+
+<div class="tab" id="t4">
+  <div class="section">
+    <div class="lbl">Accuracy heat map — all sessions</div>
+    <div style="font-size:12px;color:#888;margin-bottom:12px">Darker green = more correct. Red = struggling. Gray = not yet tried.</div>
+    <div class="heatmap-wrap" id="hm-wrap"></div>
+    <div style="display:flex;gap:16px;margin-top:12px;font-size:11px;color:#888;flex-wrap:wrap">
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:12px;background:#EAF3DE;border-radius:2px;display:inline-block"></span>0–49%</span>
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:12px;background:#97C459;border-radius:2px;display:inline-block"></span>50–79%</span>
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:12px;background:#3B6D11;border-radius:2px;display:inline-block"></span>80–100%</span>
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:12px;background:#F09595;border-radius:2px;display:inline-block"></span>Struggling (&lt;40%)</span>
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:12px;background:#f0f0ec;border:0.5px solid #e0e0d8;border-radius:2px;display:inline-block"></span>Not tried</span>
+    </div>
+  </div>
+  <div class="section">
+    <div class="lbl">Weakest pairs</div>
+    <div id="hm-weak" style="font-size:13px;color:#888">No data yet — start practicing!</div>
+  </div>
+</div>
+</div>
+
+<script>
+const TIDS=['t0','t1','t2','t3'];
+const state={
+  t0:{score:0,streak:0,mode:'mc',timerOn:false,timeLeft:60,timerId:null,x:null,answered:false,wrongs:[],curX:null,curY:null,curAnswer:null},
+  t1:{score:0,streak:0,mode:'mc',timerOn:false,timeLeft:60,timerId:null,xSel:[],ySel:[],answered:false,wrongs:[],curX:null,curY:null,curAnswer:null},
+  t2:{score:0,streak:0,mode:'mc',timerOn:false,timeLeft:60,timerId:null,xSel:[],ySel:[],answered:false,wrongs:[],curX:null,curY:null,curAnswer:null},
+  t3:{score:0,streak:0,mode:'mc',timerOn:false,timeLeft:60,timerId:null,roundTo:10,answered:false,wrongs:[],curX:null,curY:null,curAnswer:null}
+};
+const hm={};
+
+function ri(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+function rFrom(arr){return arr[Math.floor(Math.random()*arr.length)];}
+function range(a,b){return Array.from({length:b-a+1},(_,i)=>i+a);}
+function hmKey(x,y){return x+'x'+y;}
+
+function recordHm(x,y,correct){
+  const k=hmKey(x,y);
+  if(!hm[k])hm[k]={c:0,t:0};
+  hm[k].t++;
+  if(correct)hm[k].c++;
+  if(document.getElementById('t4').classList.contains('active'))renderHeatmap();
+}
+
+function showTab(i){
+  document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('active',i===j));
+  document.querySelectorAll('.tab-btn').forEach((b,j)=>b.classList.toggle('active',i===j));
+  if(i===4)renderHeatmap();
+}
+
+function setMode(tid,m){
+  state[tid].mode=m;
+  const tab=document.getElementById(tid);
+  tab.querySelectorAll('.mode-btn').forEach((b,i)=>b.classList.toggle('active',i===(m==='mc'?0:1)));
+  if(tid==='t0'&&state[tid].x!==null)askQ(tid);
+  else if(tid!=='t0')startGame(tid);
+}
+
+function toggleTimer(tid){
+  const s=state[tid];
+  s.timerOn=!s.timerOn;
+  const btn=document.getElementById(tid+'-tbtn');
+  btn.classList.toggle('active',s.timerOn);
+  document.getElementById(tid+'-barwrap').style.display=s.timerOn?'block':'none';
+  document.getElementById(tid+'-timestat').style.display=s.timerOn?'block':'none';
+  if(s.timerOn){
+    if(tid==='t0'&&s.x!==null)startTimer(tid);
+    else if(tid!=='t0')startGame(tid);
+  } else {
+    clearInterval(s.timerId);s.timerId=null;
+  }
+}
+
+function setRound(v){
+  state.t3.roundTo=v;
+  document.querySelectorAll('.r-chip').forEach(c=>c.classList.toggle('sel',parseInt(c.dataset.v)===v));
+}
+
+function buildChips(cid,nums,onToggle,initSel){
+  const el=document.getElementById(cid);el.innerHTML='';
+  nums.forEach(n=>{
+    const c=document.createElement('div');
+    c.className='chip'+(initSel.includes(n)?' sel':'');
+    c.textContent=n;c.onclick=()=>onToggle(n,c);el.appendChild(c);
+  });
+}
+
+buildChips('tt-chips',range(1,10),(n,c)=>{
+  document.querySelectorAll('#tt-chips .chip').forEach(x=>x.classList.remove('sel'));
+  c.classList.add('sel');state.t0.x=n;
+  if(state.t0.timerOn){resetTimer('t0');startTimer('t0');}
+  startGame('t0');
+},[]);
+
+buildChips('t1-x-chips',range(1,10),(n,c)=>toggleChip('t1','x',n,c),[]);
+buildChips('t1-y-chips',range(1,10),(n,c)=>toggleChip('t1','y',n,c),range(1,10));
+state.t1.ySel=range(1,10);
+document.querySelectorAll('#t1-y-chips .chip').forEach(c=>c.classList.add('sel'));
+
+buildChips('t2-x-chips',range(1,10),(n,c)=>toggleChip('t2','x',n,c),range(1,10));
+buildChips('t2-y-chips',range(1,20),(n,c)=>toggleChip('t2','y',n,c),range(1,20));
+state.t2.xSel=range(1,10);state.t2.ySel=range(1,20);
+document.querySelectorAll('#t2-x-chips .chip').forEach(c=>c.classList.add('sel'));
+document.querySelectorAll('#t2-y-chips .chip').forEach(c=>c.classList.add('sel'));
+
+function toggleChip(tid,axis,n,c){
+  const k=axis+'Sel',s=state[tid][k],idx=s.indexOf(n);
+  if(idx===-1){s.push(n);c.classList.add('sel');}else{s.splice(idx,1);c.classList.remove('sel');}
+}
+
+function startGame(tid){
+  const s=state[tid];
+  s.score=0;s.streak=0;s.wrongs=[];
+  updStats(tid);renderReview(tid);
+  if(s.timerOn){resetTimer(tid);startTimer(tid);}
+  askQ(tid);
+}
+
+function resetTimer(tid){
+  const s=state[tid];
+  clearInterval(s.timerId);s.timerId=null;s.timeLeft=60;
+  const bar=document.getElementById(tid+'-bar');
+  bar.style.width='100%';bar.className='timer-bar';
+  document.getElementById(tid+'-time').textContent='60';
+}
+
+function startTimer(tid){
+  const s=state[tid];
+  s.timeLeft=60;
+  const bar=document.getElementById(tid+'-bar');
+  bar.style.width='100%';bar.className='timer-bar';
+  document.getElementById(tid+'-time').textContent='60';
+  s.timerId=setInterval(()=>{
+    s.timeLeft--;
+    document.getElementById(tid+'-time').textContent=s.timeLeft;
+    const pct=Math.round((s.timeLeft/60)*100);
+    bar.style.width=pct+'%';
+    if(s.timeLeft<=15)bar.className='timer-bar danger';
+    else if(s.timeLeft<=30)bar.className='timer-bar warn';
+    if(s.timeLeft<=0){clearInterval(s.timerId);s.timerId=null;showEnd(tid);}
+  },1000);
+}
+
+function showEnd(tid){
+  const s=state[tid];
+  const box=document.getElementById(tid+'-qbox');
+  const stars=s.score>=20?'Excellent!':s.score>=10?'Good job!':'Keep going!';
+  box.innerHTML='<div class="end-screen"><div class="end-big">'+s.score+'</div><div class="end-sub">'+stars+' Answered in 60 seconds.</div><button class="start-btn" onclick="startGame(\''+tid+'\')">Try again</button></div>';
+  renderReview(tid);
+}
+
+function askQ(tid){
+  const s=state[tid];
+  if(s.timerId===null&&s.timerOn)return;
+  s.answered=false;
+  let x,y,product,displayQ,answer;
+  if(tid==='t0'){
+    x=s.x;y=ri(1,10);product=x*y;displayQ=x+' × '+y;answer=product;
+  } else if(tid==='t1'){
+    const xp=s.xSel.length?s.xSel:range(1,10),yp=s.ySel.length?s.ySel:range(1,10);
+    x=rFrom(xp);y=rFrom(yp);product=x*y;displayQ=x+' × '+y;answer=product;
+  } else if(tid==='t2'){
+    const xp=s.xSel.length?s.xSel:range(1,10),yp=s.ySel.length?s.ySel:range(1,20);
+    x=rFrom(xp);y=rFrom(yp);product=x*y;displayQ=x+' × '+y;answer=product;
+  } else {
+    x=ri(1,50);y=ri(1,20);product=x*y;
+    const rt=s.roundTo,rounded=Math.round(product/rt)*rt;
+    answer=rounded;displayQ=x+' × '+y+'='+product;s.curProduct=product;
+  }
+  s.curX=x;s.curY=y;s.curAnswer=answer;
+  renderQ(tid,displayQ,answer,s.mode,tid==='t3'?s.roundTo:null,tid==='t3'?s.curProduct:null);
+}
+
+function renderQ(tid,dq,answer,mode,roundTo,rawProduct){
+  const box=document.getElementById(tid+'-qbox');
+  let qHtml;
+  if(roundTo){
+    qHtml='<div class="question">'+dq.split('=')[0]+'<span class="sub">'+dq.split('=')[0].trim()+' = '+rawProduct+' — round to nearest '+roundTo+'</span></div>';
+  } else {
+    qHtml='<div class="question">'+dq+'</div>';
+  }
+  if(mode==='mc'){
+    const opts=makeMCOpts(answer,tid,roundTo);
+    box.innerHTML=qHtml+'<div class="mc-grid">'+opts.map(o=>'<button class="mc-btn" onclick="checkMC(\''+tid+'\','+o+',this)">'+o+'</button>').join('')+'</div><div class="feedback" id="'+tid+'-fb"></div>';
+  } else {
+    box.innerHTML=qHtml+'<div class="fill-form"><input class="fill-input" type="number" id="'+tid+'-inp" placeholder="?" onkeydown="if(event.key===\'Enter\')checkFill(\''+tid+'\','+answer+')"><button class="submit-btn" onclick="checkFill(\''+tid+'\','+answer+')">Check</button><div class="feedback" id="'+tid+'-fb"></div></div>';
+    setTimeout(()=>{const el=document.getElementById(tid+'-inp');if(el)el.focus();},50);
+  }
+}
+
+function makeMCOpts(answer,tid,roundTo){
+  const opts=new Set([answer]);
+  const step=roundTo||1;
+  let tries=200;
+  while(opts.size<4&&tries-->0){
+    const d=rFrom([-3,-2,-1,1,2,3])*step;
+    const fake=answer+d;
+    if(fake>0)opts.add(fake);
+  }
+  while(opts.size<4)opts.add(answer+opts.size*step);
+  return shuffle([...opts]);
+}
+
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=ri(0,i);[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function checkMC(tid,val,btn){
+  if(state[tid].answered)return;
+  state[tid].answered=true;
+  const correct=val===state[tid].curAnswer;
+  btn.classList.add(correct?'correct':'wrong');
+  if(!correct){
+    document.querySelectorAll('#'+tid+'-qbox .mc-btn').forEach(b=>{
+      if(+b.textContent===state[tid].curAnswer)b.classList.add('correct');
+    });
+    state[tid].wrongs.push({x:state[tid].curX,y:state[tid].curY,ans:state[tid].curAnswer,given:val});
+  }
+  document.querySelectorAll('#'+tid+'-qbox .mc-btn').forEach(b=>b.disabled=true);
+  scoreFeedback(tid,correct);
+  recordHm(state[tid].curX,state[tid].curY,correct);
+  if(!state[tid].timerOn){
+    const fb=document.getElementById(tid+'-fb');
+    const nb=document.createElement('button');nb.className='next-btn';nb.textContent='Next →';
+    nb.onclick=()=>{askQ(tid);renderReview(tid);};fb.after(nb);
+  } else {
+    setTimeout(()=>{askQ(tid);renderReview(tid);},700);
+  }
+}
+
+function checkFill(tid,answer){
+  if(state[tid].answered)return;
+  const inp=document.getElementById(tid+'-inp');
+  if(!inp||inp.value==='')return;
+  const val=parseInt(inp.value);
+  state[tid].answered=true;
+  inp.disabled=true;
+  document.querySelector('#'+tid+'-qbox .submit-btn').disabled=true;
+  const correct=val===answer;
+  inp.style.borderColor=correct?'#639922':'#E24B4A';
+  if(!correct){
+    state[tid].wrongs.push({x:state[tid].curX,y:state[tid].curY,ans:answer,given:val});
+    const hint=document.createElement('div');
+    hint.style.cssText='font-size:13px;color:#888;margin-top:4px';
+    hint.textContent='Answer: '+answer;
+    document.getElementById(tid+'-fb').after(hint);
+  }
+  scoreFeedback(tid,correct);
+  recordHm(state[tid].curX,state[tid].curY,correct);
+  if(!state[tid].timerOn){
+    const fb=document.getElementById(tid+'-fb');
+    const nb=document.createElement('button');nb.className='next-btn';nb.textContent='Next →';
+    nb.onclick=()=>{askQ(tid);renderReview(tid);};fb.after(nb);
+  } else {
+    setTimeout(()=>{askQ(tid);renderReview(tid);},700);
+  }
+}
+
+function scoreFeedback(tid,correct){
+  const s=state[tid],fb=document.getElementById(tid+'-fb');
+  if(correct){s.score++;s.streak++;fb.className='feedback fb-correct';fb.textContent=s.streak>=3?'Correct! '+s.streak+' in a row':'Correct!';}
+  else{s.streak=0;fb.className='feedback fb-wrong';fb.textContent='Not quite';}
+  updStats(tid);
+}
+
+function updStats(tid){
+  document.getElementById(tid+'-score').textContent=state[tid].score;
+  document.getElementById(tid+'-streak').textContent=state[tid].streak;
+}
+
+function renderReview(tid){
+  const w=state[tid].wrongs;
+  const el=document.getElementById(tid+'-review');
+  if(!w.length){el.innerHTML='';return;}
+  el.innerHTML='<div class="review-section"><div class="review-title">Wrong answers this session ('+w.length+')</div>'+
+    w.slice(-8).reverse().map(r=>'<div class="review-item"><span class="review-eq">'+r.x+' × '+r.y+' = '+r.ans+'</span><span class="review-yours">You said '+(r.given!==undefined?r.given:'?')+'</span></div>').join('')+
+  '</div>';
+}
+
+function hmColor(c,t){
+  if(!t)return null;
+  const pct=c/t;
+  if(pct<0.4)return{bg:'#F09595',fg:'#791F1F'};
+  if(pct<0.5)return{bg:'#EAF3DE',fg:'#3B6D11'};
+  if(pct<0.8)return{bg:'#97C459',fg:'#27500A'};
+  return{bg:'#3B6D11',fg:'#C0DD97'};
+}
+
+function renderHeatmap(){
+  const wrap=document.getElementById('hm-wrap');
+  const rows=range(1,10),cols=range(1,10);
+  let html='<table class="hm-table"><tr><td class="hm-hdr"></td>'+cols.map(c=>'<td class="hm-hdr">'+c+'</td>').join('')+'</tr>';
+  rows.forEach(r=>{
+    html+='<tr><td class="hm-hdr">'+r+'</td>';
+    cols.forEach(c=>{
+      const k=hmKey(r,c),d=hm[k];
+      if(!d){html+='<td class="hm-cell" style="background:#f0f0ec;color:#bbb">—</td>';}
+      else{
+        const col=hmColor(d.c,d.t);
+        const pct=Math.round((d.c/d.t)*100);
+        html+='<td class="hm-cell" title="'+r+'×'+c+': '+d.c+'/'+d.t+' ('+pct+'%)" style="background:'+col.bg+';color:'+col.fg+'">'+pct+'%</td>';
+      }
+    });
+    html+='</tr>';
+  });
+  html+='</table>';
+  wrap.innerHTML=html;
+
+  const weak=Object.entries(hm)
+    .filter(([k,v])=>v.t>=2&&(v.c/v.t)<0.6)
+    .sort((a,b)=>(a[1].c/a[1].t)-(b[1].c/b[1].t))
+    .slice(0,5);
+  const weakEl=document.getElementById('hm-weak');
+  if(!weak.length){weakEl.textContent='No weak spots yet — keep going!';return;}
+  weakEl.innerHTML=weak.map(([k,v])=>{
+    const [x,y]=k.split('x');
+    const pct=Math.round((v.c/v.t)*100);
+    return '<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;padding:6px 10px;border:0.5px solid #F7C1C1;border-radius:8px;background:#FCEBEB"><span style="font-weight:500;color:#791F1F;font-size:14px">'+x+' × '+y+' = '+(x*y)+'</span><span style="font-size:12px;color:#A32D2D;margin-left:auto">'+pct+'% correct ('+v.c+'/'+v.t+')</span></div>';
+  }).join('');
+}
+</script>
+
+
+</body></html>
